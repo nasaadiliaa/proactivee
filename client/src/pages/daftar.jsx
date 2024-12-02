@@ -12,6 +12,7 @@ const Daftar = () => {
     password: "",
     konfirmasiPassword: "",
   });
+  
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 

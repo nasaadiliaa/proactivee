@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Tambahkan ini
-import '../styles/profil.css';
-import Sidebar from '../components/Sidebar';
+import { useNavigate } from "react-router-dom"; 
+import "../styles/profil.css";
+import Sidebar from "../components/Sidebar";
 
 const Profile = () => {
-  const navigate = useNavigate(); // Inisialisasi useNavigate
+  const navigate = useNavigate(); 
   const [isEditable, setIsEditable] = useState(false);
   const [formData, setFormData] = useState({
     fullname: "Jane Doe",
     username: "janedoe",
     email: "janedoe@gmail.com",
     phone: "081234567890",
-    password: "oldpassword123", // Simulasi password lama (hardcoded untuk contoh ini)
+    password: "oldpassword123", 
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false); 
 
   const [passwordInput, setPasswordInput] = useState("");
   const [oldPassword, setOldPassword] = useState("");
@@ -62,14 +63,17 @@ const Profile = () => {
     }
 
     alert("Kata sandi Anda telah diperbarui.");
-    setFormData((prevData) => ({ ...prevData, password: newPassword })); // Update password
-    localStorage.setItem("profileData", JSON.stringify({ ...formData, password: newPassword }));
+    setFormData((prevData) => ({ ...prevData, password: newPassword }));
+    localStorage.setItem(
+      "profileData",
+      JSON.stringify({ ...formData, password: newPassword })
+    );
     setShowPasswordModal(false);
-    setError(""); // Reset error
+    setError(""); 
     setOldPassword("");
     setNewPassword("");
     setConfirmPassword("");
-    navigate("/Login"); // Navigasikan ke halaman login
+    navigate("/Login"); 
   };
 
   const handleDeleteAccount = () => {
@@ -83,11 +87,16 @@ const Profile = () => {
     }
 
     alert("Akun Anda telah dihapus.");
-    localStorage.removeItem("profileData"); // Hapus data dari localStorage
+    localStorage.removeItem("profileData"); 
     setShowDeleteModal(false);
-    setError(""); // Reset error
+    setError(""); 
     setPasswordInput("");
-    navigate("/daftar"); // Navigasikan ke halaman sign up
+    navigate("/daftar"); 
+  };
+
+  const handleLogout = () => {
+    setShowLogoutModal(false);
+    navigate("/Login");
   };
 
   return (
@@ -97,7 +106,10 @@ const Profile = () => {
       {/* Profile Section */}
       <div className="profile-section">
         <div className="profile-card">
-          <img src="https://i.pinimg.com/564x/d7/d0/13/d7d013aa4c1ee9bc96fc8ee329467d34.jpg" alt="Profile Picture" />
+          <img
+            src="https://i.pinimg.com/564x/d7/d0/13/d7d013aa4c1ee9bc96fc8ee329467d34.jpg"
+            alt="Profile Picture"
+          />
           <h2>{formData.fullname}</h2>
           <p>{formData.email}</p>
           <form>
@@ -148,7 +160,11 @@ const Profile = () => {
             </div>
 
             <div className="button-container">
-              <button type="button" className="edit-button" onClick={handleEditToggle}>
+              <button
+                type="button"
+                className="edit-button"
+                onClick={handleEditToggle}
+              >
                 {isEditable ? "Simpan" : "Edit"}
               </button>
               <button
@@ -166,6 +182,19 @@ const Profile = () => {
               onClick={() => setShowPasswordModal(true)}
             >
               Ganti Kata Sandi
+            </button>
+            <button
+              type="button"
+              className="logout-button"
+              style={{
+                width: "100%",
+                marginTop: "10px",
+                backgroundColor: "red",
+                color: "white",
+              }}
+              onClick={() => setShowLogoutModal(true)} 
+            >
+              Logout
             </button>
           </form>
         </div>
@@ -213,8 +242,8 @@ const Profile = () => {
             <h2>Hapus Akun</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <p>
-              Tindakan ini dapat mengakibatkan riwayat tugasmu terhapus permanen.
-              Apakah Anda yakin?
+              Tindakan ini dapat mengakibatkan riwayat tugasmu terhapus
+              permanen. Apakah Anda yakin?
             </p>
             <input
               type="password"
@@ -223,6 +252,21 @@ const Profile = () => {
               onChange={(e) => setPasswordInput(e.target.value)}
             />
             <button onClick={handleDeleteAccount}>Hapus Akun</button>
+          </div>
+        </div>
+      )}
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="modal" onClick={() => setShowLogoutModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close" onClick={() => setShowLogoutModal(false)}>
+              &times;
+            </span>
+            <h2>Logout</h2>
+            <p>Anda yakin untuk keluar dari akun?</p>
+            <button onClick={handleLogout}>Ya</button>
+            <button onClick={() => setShowLogoutModal(false)}>Tidak</button>
           </div>
         </div>
       )}
