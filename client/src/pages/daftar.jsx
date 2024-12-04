@@ -12,7 +12,6 @@ const Daftar = () => {
     password: "",
     konfirmasiPassword: "",
   });
-  
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
@@ -174,10 +173,17 @@ const Daftar = () => {
               required
             />
 
-            <button href="/login" type="submit" className="daftar-button">
+            <button type="submit" className="daftar-button">
               Daftar
             </button>
           </form>
+
+          <p className="login-link">
+            Sudah punya akun?{" "}
+            <span onClick={() => navigate("/Login")} style={{ color: "blue", cursor: "pointer" }}>
+              Login disini
+            </span>
+          </p>
         </div>
       </div>
     </div>
