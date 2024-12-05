@@ -4,7 +4,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'express'
+    database: 'time_management_platform'
 });
 
 connection.connect((err) => {
