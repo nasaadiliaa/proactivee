@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+import mysql from 'mysql2';  // Ganti require dengan import
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -9,10 +9,10 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err){
-        console.error('Error conncetion to database: ' + err.stack);
+        console.error('Error connection to database: ' + err.stack);
         return;
     }
-    console.log('Connected to database with ID' + connection.threadId);
+    console.log('Connected to database with ID ' + connection.threadId);
 });
 
-module.exports = connection;
+export default connection; 
