@@ -73,10 +73,7 @@ const HariIni = () => {
             <input type="text" value={newTask.name} onChange={(e) => setNewTask({ ...newTask, name: e.target.value })} />
 
             <label>Tanggal:</label>
-            <input type="date" value={newTask.date} onChange={(e) => setNewTask({ ...newTask, date: e.target.value })} />
-
-            <label>Waktu:</label>
-            <input type="time" value={newTask.time} onChange={(e) => setNewTask({ ...newTask, time: e.target.value })} />
+            <input type="datetime" value={newTask.date} onChange={(e) => setNewTask({ ...newTask, date: e.target.value })} />
 
             <div className="buttons">
               <button className="cancel" onClick={closePopup}>Batal</button>

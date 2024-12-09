@@ -77,27 +77,55 @@ const router = express.Router();
 
 // Endpoint untuk mendapatkan semua pengguna (GET /users)
 router.get('/users', (req, res) => {
+    console.log(req.body);
     db.query('SELECT * FROM users', (err, results) => {
-        if (err) throw err;
-        res.send(results);
+        if (err) {
+            console.error
+            ('Error saat mengambil pengguna:', err);
+            return res.status(500).json({ error: "Gagal mengambil data pengguna" });
+        }
+        res.status(200).json(results); // Mengirimkan hasil query sebagai JSON
     });
 });
 
 // Endpoint untuk menambahkan pengguna baru (POST /users)
 router.post('/users', (req, res) => {
-    const { name, email, password } = req.body;
     
-    if (!name || !email || !password) {
+    const { full_name, username, email, phone_number, password_hash } = req.body;
+    // res.status(200).json(res.body);
+
+    if (!full_name || !username || !email || !phone_number ||!password_hash) {
         return res.status(400).json({ error: "Semua kolom harus diisi" });
     }
 
     // Query untuk memasukkan pengguna baru ke dalam database
-    db.query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password], (err, result) => {
+    db.query('INSERT INTO users (full_name, username, email, phone_number, password_hash) VALUES (?, ?, ?, ?, ?)', [full_name, username, email, phone_number, password_hash], (err, result) => {
         if (err) {
             console.error('Error saat menambahkan pengguna:', err);
             return res.status(500).json({ error: "Gagal menambahkan pengguna" });
         }
         res.status(201).json({ message: "Pengguna berhasil ditambahkan", userId: result.insertId });
+    });
+});
+
+// Endpoint untuk menambahkan pengguna baru (POST /tasks)
+router.post('/tasks', (req, res) => {
+    
+    const { user_id, name, date, status } = req.body;
+    // res.status(200).json(res.body);
+
+    if (!user_id || !name || !date || !status) {
+        return res.status(400).json({ error: "Semua kolom harus diisi" });
+    }
+
+
+    // Query untuk memasukkan pengguna baru ke dalam database
+    db.query('INSERT INTO tasks (user_id, name, date, status) VALUES (?, ?, ?, ?)', [user_id, name, date, status], (err, result) => {
+        if (err) {
+            console.error('Error saat menambahkan tugas:', err);
+            return res.status(500).json({ error: "Gagal menambahkan tugas" });
+        }
+        res.status(201).json({ message: "Tugas berhasil ditambahkan", userId: result.insertId });
     });
 });
 

@@ -1,8 +1,8 @@
 import express from 'express';
 // import cors from 'cors';
-// import router from './routes.js'; // Menggunakan import sesuai dengan ekspor default
+import router from './routes.js'; // Menggunakan import sesuai dengan ekspor default
 import db from './config/database.js';
-import router from './routes/index.js';
+// import router from './routes/index.js';
 
 const app = express();
 const port = 8083;
@@ -15,9 +15,10 @@ const startServer = async () => {
     } catch (error) {
         console.error(error);
     }
-
-    app.use('/api', router);
     app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    
+    app.use('/', router);
     // app.use(cors());
     // app.use(express.json()); // Middleware untuk parsing JSON
     // app.use('/api', router);  // Gunakan router yang sudah dibuat
