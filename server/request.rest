@@ -12,3 +12,12 @@ Content-Type: application/json
     "confPassword": "password123"
 }
 
+###
+POST  http://localhost:8083/login
+
+Content-Type: application/json
+
+{
+    "email": "pikaw@gmail.com",
+    "password": "1111"
+}

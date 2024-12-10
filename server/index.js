@@ -1,9 +1,12 @@
 import express from 'express';
-// import cors from 'cors';
-import router from './routes.js'; // Menggunakan import sesuai dengan ekspor default
+import dotenv from "dotenv";
+import cookieParser from 'cookie-parser';
+import router from './routes.js';
 import db from './config/database.js';
+import cors from 'cors';
 // import router from './routes/index.js';
 
+dotenv.config();
 const app = express();
 const port = 8083;
 
@@ -17,19 +20,17 @@ const startServer = async () => {
     }
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    
+    app.use(cookieParser());
+    app.use(express.json());
     app.use('/', router);
-    // app.use(cors());
-    // app.use(express.json()); // Middleware untuk parsing JSON
-    // app.use('/api', router);  // Gunakan router yang sudah dibuat
-
-    // app.get('/', (req, res) => {
-    //     res.send('Halo dari server kami!');
-    // });
+    app.use(cors({
+        origin: 'http://localhost:3000',  // Ganti dengan URL frontend Anda
+        credentials: true,  // Agar cookies dikirimkan bersama request
+    }));
 
     app.listen(port, () => {
         console.log(`Server mendengarkan pada port ${port}`);
     });
 };
 
-startServer();  // Panggil fungsi async startServer untuk menjalankan server
+startServer();  

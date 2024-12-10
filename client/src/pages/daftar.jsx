@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import "../styles/daftar.css";
 
 const Daftar = () => {
@@ -43,7 +44,7 @@ const Daftar = () => {
     return usernameRegex.test(username);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { fullname, username, email, noHandphone, password, konfirmasiPassword } = formData;
 
@@ -67,11 +68,30 @@ const Daftar = () => {
       return;
     }
 
-    // Simpan data ke localStorage
-    localStorage.setItem("profileData", JSON.stringify(formData));
-    setErrorMessage(""); // Reset error
-    alert("Pendaftaran berhasil!");
-    navigate("/Login");
+    try {
+      // Kirim data ke backend menggunakan Axios
+      const response = await axios.post("http://localhost:5000/users", {
+        full_name: fullname,
+        username: username,
+        email: email,
+        phone_number: noHandphone,
+        password_hash: password,
+      });
+
+      // Jika berhasil, reset error dan navigasi ke halaman login
+      setErrorMessage(""); 
+      localStorage.setItem("profileData", JSON.stringify(formData));
+      alert("Pendaftaran berhasil!");
+      navigate("/Login");
+
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.error || "Terjadi kesalahan saat mendaftar.");
+      } else {
+        // Tangani error jika response atau data tidak ada
+        setErrorMessage("Terjadi kesalahan yang tidak terduga.");
+      }
+    }
   };
 
   return (
@@ -189,5 +209,4 @@ const Daftar = () => {
     </div>
   );
 };
-
 export default Daftar;
